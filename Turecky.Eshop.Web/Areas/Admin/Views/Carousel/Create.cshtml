@@ -1,0 +1,13 @@
+﻿@model CarouselItem
+@{
+    ViewData["Title"] = "Create Carousel Item";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to create a carousel item.</p>
+
+@{ 
+    ViewBag.Action = nameof(CarouselController.Create);
+}
+
+<partial name="CreateEditForm" model="Model">

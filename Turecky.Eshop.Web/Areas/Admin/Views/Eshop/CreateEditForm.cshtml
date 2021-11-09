@@ -1,0 +1,26 @@
+﻿@model EshopItem
+@{
+    if (ViewBag.Action != null)
+    {
+
+
+        <form asp-action="@ViewBag.Action" method="post">
+            @{
+                if (ViewBag.Action == nameof(EshopController.Edit))
+                {
+                    <input asp-for="ID" type="hidden">
+                }
+            }
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" type="text" class="form-control" placeholder="Enter Product Name">
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <input asp-for="Description" type="text" class="form-control" placeholder="Enter Product Description">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    }
+}
+

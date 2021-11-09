@@ -1,0 +1,13 @@
+﻿@model EshopItem
+@{
+    ViewData["Title"] = "Create Eshop Item";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to create an eshop item.</p>
+
+@{
+    ViewBag.Action = nameof(EshopController.Create);
+}
+
+<partial name="CreateEditForm" model="Model">
