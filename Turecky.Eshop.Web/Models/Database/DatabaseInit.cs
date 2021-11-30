@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Turecky.Eshop.Web.Models.Entity;
+using Turecky.Eshop.Web.Models.Identity;
 
 namespace Turecky.Eshop.Web.Models.Database
 {
@@ -89,6 +92,93 @@ namespace Turecky.Eshop.Web.Models.Database
 
 
             return eshopItems;
+        }
+
+        public async Task EnsureRoleCreated(RoleManager<Role> roleManager)
+        {
+            string[] roles = Enum.GetNames(typeof(Roles));
+
+            foreach (var role in roles)
+            {
+                await roleManager.CreateAsync(new Role(role));
+            }
+        }
+
+        public async Task EnsureAdminCreated(UserManager<User> userManager)
+        {
+            User user = new User
+            {
+                UserName = "admin",
+                Email = "admin@admin.cz",
+                EmailConfirmed = true,
+                FirstName = "Tomas",
+                LastName = "Turecky"
+            };
+            string password = "abc";
+
+            User adminInDatabase = await userManager.FindByNameAsync(user.UserName);
+
+            if (adminInDatabase == null)
+            {
+
+                IdentityResult result = await userManager.CreateAsync(user, password);
+
+                if (result == IdentityResult.Success)
+                {
+                    string[] roles = Enum.GetNames(typeof(Roles));
+                    foreach (var role in roles)
+                    {
+                        await userManager.AddToRoleAsync(user, role);
+                    }
+                }
+                else if (result != null && result.Errors != null && result.Errors.Count() > 0)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        Debug.WriteLine($"Error during Role creation for Admin: {error.Code}, {error.Description}");
+                    }
+                }
+            }
+
+        }
+
+        public async Task EnsureManagerCreated(UserManager<User> userManager)
+        {
+            User user = new User
+            {
+                UserName = "manager",
+                Email = "manager@manager.cz",
+                EmailConfirmed = true,
+                FirstName = "Tomas",
+                LastName = "Turecky"
+            };
+            string password = "abc";
+
+            User managerInDatabase = await userManager.FindByNameAsync(user.UserName);
+
+            if (managerInDatabase == null)
+            {
+
+                IdentityResult result = await userManager.CreateAsync(user, password);
+
+                if (result == IdentityResult.Success)
+                {
+                    string[] roles = Enum.GetNames(typeof(Roles));
+                    foreach (var role in roles)
+                    {
+                        if (role != Roles.Admin.ToString())
+                            await userManager.AddToRoleAsync(user, role);
+                    }
+                }
+                else if (result != null && result.Errors != null && result.Errors.Count() > 0)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        Debug.WriteLine($"Error during Role creation for Manager: {error.Code}, {error.Description}");
+                    }
+                }
+            }
+
         }
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Turecky.Eshop.Web.Models.Database;
+using Turecky.Eshop.Web.Models.Identity;
 
 namespace Turecky.Eshop.Web
 {
@@ -24,6 +26,19 @@ namespace Turecky.Eshop.Web
                     EshopDbContext dbContext = scope.ServiceProvider.GetRequiredService<EshopDbContext>();
                     DatabaseInit dbInit = new DatabaseInit();
                     dbInit.Initialization(dbContext);
+
+                    RoleManager<Role> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+                    Task task = dbInit.EnsureRoleCreated(roleManager);
+                    task.Wait();
+                    task.Dispose();
+
+                    UserManager<User> userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                    task = dbInit.EnsureAdminCreated(userManager);
+                    task.Wait();
+                    task.Dispose();
+                    task = dbInit.EnsureManagerCreated(userManager);
+                    task.Wait();
+                    task.Dispose();
                 }
             }
 

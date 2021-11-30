@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Turecky.Eshop.Web.Models.ApplicationServices.Abstraction;
+using Turecky.Eshop.Web.Models.ApplicationServices.Implementation;
 using Turecky.Eshop.Web.Models.Database;
 using Turecky.Eshop.Web.Models.Identity;
 
@@ -59,7 +61,7 @@ namespace Turecky.Eshop.Web
 
 
 
-            //services.AddScoped<ISecurityApplicationService, SecurityIdentityApplicationService>();
+            services.AddScoped<ISecurityApplicationService, SecurityIdentityApplicationService>();
 
             services.AddControllersWithViews();
         }
