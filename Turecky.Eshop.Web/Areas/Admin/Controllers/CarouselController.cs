@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Turecky.Eshop.Web.Models.Database;
 using Turecky.Eshop.Web.Models.Entity;
+using Turecky.Eshop.Web.Models.Implementation;
 using Turecky.Eshop.Web.Models.ViewModels;
 
 namespace Turecky.Eshop.Web.Areas.Admin.Controllers
@@ -13,9 +15,11 @@ namespace Turecky.Eshop.Web.Areas.Admin.Controllers
     public class CarouselController : Controller
     {
         readonly EshopDbContext eshopDbContext;
+        IWebHostEnvironment env;
 
-        public CarouselController(EshopDbContext eshopDB)
+        public CarouselController(EshopDbContext eshopDB, IWebHostEnvironment env)
         {
+            this.env = env;
             eshopDbContext = eshopDB;
         }
 
@@ -34,20 +38,24 @@ namespace Turecky.Eshop.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CarouselItem carouselItem)
         {
-            if(String.IsNullOrWhiteSpace(carouselItem.ImageSrc) == false
-                && String.IsNullOrWhiteSpace(carouselItem.ImageAlt) == false)
+            if (carouselItem != null && carouselItem.Image != null)
             {
-                //Pouze pro DatabaseFake
-                /*if(eshopDbContext.CarouselItems != null && eshopDbContext.CarouselItems.Count() > 0)
+
+                FileUpload fileUpload = new FileUpload(env.WebRootPath, "img/CarouselItems", "image");
+                carouselItem.ImageSrc = await fileUpload.FileUploadAsync(carouselItem.Image);
+
+                ModelState.Clear();
+                TryValidateModel(carouselItem);
+                if (ModelState.IsValid)
                 {
-                    carouselItem.ID = eshopDbContext.CarouselItems.Last().ID + 1;
-                }*/
+                    eshopDbContext.CarouselItems.Add(carouselItem);
 
-                eshopDbContext.CarouselItems.Add(carouselItem);
+                    await eshopDbContext.SaveChangesAsync();
 
-                await eshopDbContext.SaveChangesAsync();
+                    return RedirectToAction(nameof(CarouselController.Select));
 
-                return RedirectToAction(nameof(CarouselController.Select));
+
+                }
             }
             return View(carouselItem);
         }

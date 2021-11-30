@@ -1,4 +1,5 @@
-﻿@model CarouselItem
+﻿@using Turecky.Eshop.Web.Areas.Admin.Controllers
+@model CarouselItem
 @{
     ViewData["Title"] = "Create Carousel Item";
 }
@@ -6,8 +7,13 @@
 
 <p>Use this page to create a carousel item.</p>
 
-@{ 
+@{
     ViewBag.Action = nameof(CarouselController.Create);
 }
 
 <partial name="CreateEditForm" model="Model">
+    @section Scripts{
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/js/Validation/FileContentTypeValidation.js"></script>
+    }
