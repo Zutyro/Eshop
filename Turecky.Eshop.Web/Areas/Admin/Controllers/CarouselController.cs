@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -6,12 +7,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Turecky.Eshop.Web.Models.Database;
 using Turecky.Eshop.Web.Models.Entity;
+using Turecky.Eshop.Web.Models.Identity;
 using Turecky.Eshop.Web.Models.Implementation;
 using Turecky.Eshop.Web.Models.ViewModels;
 
 namespace Turecky.Eshop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = nameof(Roles.Admin) + ", " + nameof(Roles.Manager))]
     public class CarouselController : Controller
     {
         readonly EshopDbContext eshopDbContext;

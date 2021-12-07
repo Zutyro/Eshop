@@ -7,20 +7,24 @@ using System.Threading.Tasks;
 
 namespace Turecky.Eshop.Web.Models.Entity
 {
-    [Table(nameof(EshopItem))]
-    public class EshopItem
+    [Table(nameof(OrderItem))]
+    public class OrderItem
     {
+
         [Key]
         [Required]
         public int ID { get; set; }
 
-        [StringLength(255)]
-        [Required]
-        public string Name { get; set; }
+        [ForeignKey(nameof(Order))]
+        public int OrderID { get; set; }
 
-        [StringLength(255)]
-        public string Description { get; set; }
+        [ForeignKey(nameof(Product))]
+        public int ProductID { get; set; }
 
+        public int Amount { get; set; }
         public double Price { get; set; }
+
+        public Order Order { get; set; }
+        public EshopItem Product { get; set; }
     }
 }
