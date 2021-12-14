@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Turecky.Eshop.Web.Models.Database;
 using Turecky.Eshop.Web.Models.Entity;
 using Turecky.Eshop.Web.Models.Identity;
+using Turecky.Eshop.Web.Models.Implementation;
 using Turecky.Eshop.Web.Models.ViewModels;
 
 namespace Turecky.Eshop.Web.Areas.Admin.Controllers
@@ -17,9 +19,11 @@ namespace Turecky.Eshop.Web.Areas.Admin.Controllers
     {
 
         readonly EshopDbContext eshopDbContext;
+        IWebHostEnvironment env;
 
-        public EshopController(EshopDbContext eshopDB)
+        public EshopController(EshopDbContext eshopDB, IWebHostEnvironment env)
         {
+            this.env = env;
             eshopDbContext = eshopDB;
         }
 
@@ -37,20 +41,23 @@ namespace Turecky.Eshop.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(EshopItem eshopItem)
         {
-            if (String.IsNullOrWhiteSpace(eshopItem.Name) == false
-                && String.IsNullOrWhiteSpace(eshopItem.Description) == false)
+            if (eshopItem != null && eshopItem.Image != null && String.IsNullOrWhiteSpace(eshopItem.Name) == false
+                    && String.IsNullOrWhiteSpace(eshopItem.Description) == false)
             {
-                //Pouze pro DatabaseFake
-                /*if (DatabaseFake.EshopItems != null && DatabaseFake.EshopItems.Count > 0)
+
+                FileUpload fileUpload = new FileUpload(env.WebRootPath, "img/EshopItems", "image");
+                eshopItem.ImageSrc = await fileUpload.FileUploadAsync(eshopItem.Image);
+
+                ModelState.Clear();
+                TryValidateModel(eshopItem);
+                if (ModelState.IsValid)
                 {
-                    eshopItem.ID = DatabaseFake.EshopItems.Last().ID + 1;
-                }*/
+                    eshopDbContext.EshopItems.Add(eshopItem);
 
-                eshopDbContext.EshopItems.Add(eshopItem);
+                    await eshopDbContext.SaveChangesAsync();
 
-                await eshopDbContext.SaveChangesAsync();
-
-                return RedirectToAction(nameof(EshopController.Select));
+                    return RedirectToAction(nameof(EshopController.Select));
+                }
             }
             return View(eshopItem);
         }

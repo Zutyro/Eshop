@@ -71,19 +71,22 @@ namespace Turecky.Eshop.Web.Models.Database
             {
                 ID = 0,
                 Name = "Opticka mys",
-                Description = "Opticka USB mys pro PC."
+                Description = "Opticka USB mys pro PC.",
+                Price = 250
             };
             EshopItem ei2 = new EshopItem()
             {
                 ID = 1,
                 Name = "Pevny disk",
-                Description = "Mechanicky pevny disk s 7200 otacek za minutu."
+                Description = "Mechanicky pevny disk s 7200 otacek za minutu a ulozistem 1TB.",
+                Price = 1150
             };
             EshopItem ei3 = new EshopItem()
             {
                 ID = 2,
                 Name = "Klavesnice",
-                Description = "USB klavesnice pro PC se standardnim rozlozenim."
+                Description = "USB klavesnice pro PC se standardnim rozlozenim.",
+                Price = 500
             };
 
             eshopItems.Add(ei1);

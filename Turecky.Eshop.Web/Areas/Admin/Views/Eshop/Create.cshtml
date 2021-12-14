@@ -1,4 +1,5 @@
-﻿@model EshopItem
+﻿@using Turecky.Eshop.Web.Areas.Admin.Controllers
+@model EshopItem
 @{
     ViewData["Title"] = "Create Eshop Item";
 }
@@ -11,3 +12,8 @@
 }
 
 <partial name="CreateEditForm" model="Model">
+    @section Scripts{
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/js/Validation/FileContentTypeValidation.js"></script>
+    }

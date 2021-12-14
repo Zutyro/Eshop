@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Turecky.Eshop.Web.Models.Validation;
 
 namespace Turecky.Eshop.Web.Models.Entity
 {
@@ -22,5 +24,13 @@ namespace Turecky.Eshop.Web.Models.Entity
         public string Description { get; set; }
 
         public double Price { get; set; }
+
+        [ContentType("image")]
+        [NotMapped]
+        public IFormFile Image { get; set; }
+
+        [StringLength(255)]
+        [Required]
+        public string ImageSrc { get; set; }
     }
 }

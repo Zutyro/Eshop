@@ -1,26 +1,40 @@
-﻿@model EshopItem
+﻿@using Turecky.Eshop.Web.Areas.Admin.Controllers
+@model EshopItem
 @{
-    if (ViewBag.Action != null)
+    if (String.IsNullOrWhiteSpace(ViewBag.Action) == false)
     {
 
-
-        <form asp-action="@ViewBag.Action" method="post">
-            @{
-                if (ViewBag.Action == nameof(EshopController.Edit))
-                {
-                    <input asp-for="ID" type="hidden">
-                }
+    <form asp-action="@ViewBag.Action" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        @{
+            if (ViewBag.Action == nameof(EshopController.Edit))
+            {
+                <input type="hidden" asp-for="ID" class="form-control">
             }
-            <div class="form-group">
-                <label asp-for="Name">Name</label>
-                <input asp-for="Name" type="text" class="form-control" placeholder="Enter Product Name">
-            </div>
-            <div class="form-group">
-                <label asp-for="Description">Description</label>
-                <input asp-for="Description" type="text" class="form-control" placeholder="Enter Product Description">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        }
+        <div class="form-group">
+            <label asp-for="Image">Image</label>
+            <input id="fileupload" asp-for="Image" class="form-control-file" accept="image/*" placeholder="Enter image File">
+            <span asp-validation-for="Image" class="text-danger"></span>
+
+        </div>
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" type="text" class="form-control" placeholder="Enter Product Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <input asp-for="Description" type="text" class="form-control" placeholder="Enter Product Description">
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price">Price</label>
+            <input asp-for="Price" type="text" class="form-control" placeholder="Enter Product Price">
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
     }
 }
 

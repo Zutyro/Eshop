@@ -25,8 +25,10 @@ namespace Turecky.Eshop.Web.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Byla zobrazena hlavni stranka");
             IndexViewModel indexVM = new IndexViewModel();
             indexVM.CarouselItems = eshopDbContext.CarouselItems.ToList();
+            indexVM.EshopItems = eshopDbContext.EshopItems.ToList();
 
             return View(indexVM);
         }
